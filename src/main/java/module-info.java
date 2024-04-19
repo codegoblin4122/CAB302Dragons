@@ -5,4 +5,7 @@ module com.example.addressbook {
 
     opens com.example.addressbook to javafx.fxml;
     exports com.example.addressbook;
+
+    opens com.example.activitytracker to javafx.fxml;
+    exports com.example.activitytracker;
 }
