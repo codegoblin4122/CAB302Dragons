@@ -5,8 +5,8 @@
 
 #bold-text {
     -fx-font: 60px Roboto;
-    -fx-stroke: black;
     -fx-stroke-width: 2;
+
 }
 
 #controls-text {
