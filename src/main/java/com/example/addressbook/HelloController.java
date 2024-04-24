@@ -19,7 +19,7 @@ public class HelloController {
     @FXML
     private CheckBox agreeCheckBox;
     @FXML
-    private Button nextButton;
+    private Button signUpButton;
 
     @FXML
     public void initialize() {
@@ -48,11 +48,11 @@ Elementum nibh tellus molestie nunc non blandit massa.""");
     @FXML
     protected void onAgreeCheckBoxClick() {
         boolean accepted = agreeCheckBox.isSelected();
-        nextButton.setDisable(!accepted);
+        signUpButton.setDisable(!accepted);
     }
     @FXML
-    protected void onNextButtonClick() throws IOException {
-        Stage stage = (Stage) nextButton.getScene().getWindow();
+    protected void onSignUpButtonClick() throws IOException {
+        Stage stage = (Stage) signUpButton.getScene().getWindow();
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("main-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), HelloApplication.WIDTH, HelloApplication.HEIGHT);
         stage.setScene(scene);
