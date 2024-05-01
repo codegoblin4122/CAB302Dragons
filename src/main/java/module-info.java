@@ -1,6 +1,7 @@
 module com.example.addressbook {
     requires javafx.controls;
     requires javafx.fxml;
+    requires com.jfoenix;
 
 
     opens com.example.addressbook to javafx.fxml;
