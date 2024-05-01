@@ -1,40 +1,57 @@
 package com.example.cab302;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
 import javafx.scene.control.TextField;
 import javafx.scene.control.PasswordField;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.Statement;
 import java.sql.ResultSet;
 
 public class HelloController {
+
     @FXML
-    private Label welcomeText;
+    private Button signUpButton;
+
+    @FXML
+    private AnchorPane Scene1AnchorPane;
+
+    @FXML
+    private BorderPane LoginPane;
 
     @FXML
     private Button cancelButton;
 
     @FXML
-    private Label loginMessageLabel;
+    private Button loginButton;
 
     @FXML
-    private TextField usernameTextField;
+    private Label loginMessageLabel;
 
     @FXML
     private PasswordField passwordPasswordField;
 
     @FXML
-    protected void cancelButtonOnAction(ActionEvent e) {
+    private TextField usernameTextField;
+
+    @FXML
+    void SwitchToSignUp() throws IOException {
+        new SceneSwitch(Scene1AnchorPane, "view/hello-view.fxml");
+    }
+
+    @FXML
+    protected void cancelButtonOnAction() {
         Stage stage = (Stage) cancelButton.getScene().getWindow();
         stage.close();
     }
 
-    public void loginButtonOnAction(ActionEvent e) {
+    public void loginButtonOnAction() {
         if (!usernameTextField.getText().isBlank() && !passwordPasswordField.getText().isBlank()) {
             //loginMessageLabel.setText("You tried to login!");
             validateLogin();

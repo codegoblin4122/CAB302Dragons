@@ -3,6 +3,7 @@ module com.example.cab302 {
     requires javafx.fxml;
     requires javafx.graphics;
     requires java.sql;
+    requires java.desktop;
 //    requires mysql.connector.j;
 
 
