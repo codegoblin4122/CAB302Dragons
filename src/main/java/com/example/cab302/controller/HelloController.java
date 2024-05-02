@@ -46,42 +46,49 @@ public class HelloController {
         stage.close();
     }
 
-    public void loginButtonOnAction() {
-        if (!usernameTextField.getText().isBlank() && !passwordPasswordField.getText().isBlank()) {
-            //loginMessageLabel.setText("You tried to login!");
-            validateLogin();
-        } else {
-            loginMessageLabel.setText("Please enter your username and password");
-        }
-    }
-
-    public void validateLogin() {
-        DatabaseConnection connectNow = new DatabaseConnection();
-        Connection connectDB = connectNow.getConnection();
-
-        String verifyLogin = "SELECT count(1) FROM UserAccounts WHERE username = '" + usernameTextField.getText() + "' AND password = '" + passwordPasswordField.getText() + "';";
-
-        try {
-            Statement statement = connectDB.createStatement();
-            ResultSet queryResult = statement.executeQuery(verifyLogin);
-
-            while(queryResult.next()) {
-                if (queryResult.getInt(1) == 1) {
-                    loginMessageLabel.setText("Welcome!");
-                } else {
-                    loginMessageLabel.setText("Invalid Login. Please try again");
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+// Used with DatabaseConnection - switch to SqliteConnection
+//    public void loginButtonOnAction() {
+//        if (!usernameTextField.getText().isBlank() && !passwordPasswordField.getText().isBlank()) {
+//            //loginMessageLabel.setText("You tried to login!");
+//            validateLogin();
+//        } else {
+//            loginMessageLabel.setText("Please enter your username and password");
+//        }
+//    }
+//
+//    public void validateLogin() {
+//        DatabaseConnection connectNow = new DatabaseConnection();
+//        Connection connectDB = connectNow.getConnection();
+//
+//        String verifyLogin = "SELECT count(1) FROM UserAccounts WHERE username = '" + usernameTextField.getText() + "' AND password = '" + passwordPasswordField.getText() + "';";
+//
+//        try {
+//            Statement statement = connectDB.createStatement();
+//            ResultSet queryResult = statement.executeQuery(verifyLogin);
+//
+//            while(queryResult.next()) {
+//                if (queryResult.getInt(1) == 1) {
+//                    loginMessageLabel.setText("Welcome!");
+//                } else {
+//                    loginMessageLabel.setText("Invalid Login. Please try again");
+//                }
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
 
     @FXML
     protected void SwitchToSignUp() throws IOException {
         Stage stage = (Stage) signUpButton.getScene().getWindow();
-        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("view/SignupNew.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("view/Signup.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), Main.WIDTH, Main.HEIGHT);
         stage.setScene(scene);
+    }
+
+    @FXML
+    protected void loginButtonOnAction() throws IOException {
+        Stage stage = (Stage) cancelButton.getScene().getWindow();
+        stage.close();
     }
 }
