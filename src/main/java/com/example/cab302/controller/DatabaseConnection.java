@@ -1,4 +1,5 @@
-package com.example.cab302;
+package com.example.cab302.controller;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 public class DatabaseConnection {

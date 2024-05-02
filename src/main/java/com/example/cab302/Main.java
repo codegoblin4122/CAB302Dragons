@@ -8,11 +8,16 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class Main extends Application {
+
+    public static final String TITLE = "CAB302 Dragons";
+    public static final int WIDTH = 640;
+    public static final int HEIGHT = 360;
+
     @Override
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("view/hello-view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 520, 400);
-        stage.setTitle("CAB302 Dragons");
+        Scene scene = new Scene(fxmlLoader.load(), WIDTH, HEIGHT);
+        stage.setTitle(TITLE);
         stage.setScene(scene);
         stage.show();
     }

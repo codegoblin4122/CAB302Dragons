@@ -1,12 +1,14 @@
-package com.example.cab302;
+package com.example.cab302.controller;
 
+import com.example.cab302.Main;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
 import javafx.scene.control.TextField;
 import javafx.scene.control.PasswordField;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 
 import java.io.IOException;
@@ -18,9 +20,6 @@ public class HelloController {
 
     @FXML
     private Button signUpButton;
-
-    @FXML
-    private AnchorPane Scene1AnchorPane;
 
     @FXML
     private BorderPane LoginPane;
@@ -40,10 +39,6 @@ public class HelloController {
     @FXML
     private TextField usernameTextField;
 
-    @FXML
-    void SwitchToSignUp() throws IOException {
-        new SceneSwitch(Scene1AnchorPane, "view/hello-view.fxml");
-    }
 
     @FXML
     protected void cancelButtonOnAction() {
@@ -80,5 +75,13 @@ public class HelloController {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @FXML
+    protected void SwitchToSignUp() throws IOException {
+        Stage stage = (Stage) signUpButton.getScene().getWindow();
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("view/SignupNew.fxml"));
+        Scene scene = new Scene(fxmlLoader.load(), Main.WIDTH, Main.HEIGHT);
+        stage.setScene(scene);
     }
 }

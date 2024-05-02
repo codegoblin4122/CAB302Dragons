@@ -1,0 +1,26 @@
+package com.example.cab302.controller;
+
+import com.example.cab302.Main;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.stage.Stage;
+
+import java.io.IOException;
+
+public class SignupController {
+
+    @FXML
+    private Button LoginButton;
+
+
+    @FXML
+    protected void SwitchtoLogin() throws IOException {
+        Stage stage = (Stage) LoginButton.getScene().getWindow();
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("view/hello-view.fxml"));
+        Scene scene = new Scene(fxmlLoader.load(), Main.WIDTH, Main.HEIGHT);
+        stage.setScene(scene);
+    }
+}
+
