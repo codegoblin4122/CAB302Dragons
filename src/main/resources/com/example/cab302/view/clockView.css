@@ -1,0 +1,18 @@
+.root {
+    -fx-padding: 20;
+    -fx-background-color: #f0f0f0;
+}
+
+#bold-text {
+    -fx-font: 60px Roboto;
+    -fx-stroke-width: 2;
+
+}
+
+#controls-text {
+    -fx-font: 40px Roboto;
+    -fx-stroke-width: 1;
+    -fx-stroke: black;
+}
+
+
