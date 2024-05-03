@@ -1,35 +1,42 @@
 package com.example.activitytracker;
-import javafx.animation.RotateTransition;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Application;
+import javafx.geometry.Insets;
+import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
+import javafx.scene.control.CheckBox;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.Shape;
-import javafx.scene.shape.Polygon;
-import javafx.scene.text.Font;
+import javafx.scene.shape.*;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.util.Objects;
 
-//change
 
 
 public class RingTimerApplication extends Application {
     private StackPane root;
     private Scene scene;
-    private Circle innerCircle, timerCircle, outerCircle, topDot, bottomDot;
+    private Circle innerCircle, outerCircle, topDot, bottomDot;
+    private Arc timerCircle;
+    private Pane arcPane;
+
     private Text statusText;
     private Polygon firstUp, secondUp, thirdUp, fourthUp, firstDown, secondDown, thirdDown, fourthDown;
     private Text tenHoursField, hoursField, tenMinutesField, minutesField ;
 
     private Rectangle ctrlBox, firstUpBox, secondUpBox, thirdUpBox, fourthUpBox, firstDownBox, secondDownBox, thirdDownBox, fourthDownBox;
-
+    private Timeline timeline;
+    private Duration timeLeft;
+    private CheckBox timerMode;
+    private ImageView resetButton;
 
     @Override
     public void start(Stage primaryStage) {
@@ -51,7 +58,20 @@ public class RingTimerApplication extends Application {
         thirdDownBox.setOnMouseClicked(event -> incrementControls(false,3));
         fourthUpBox.setOnMouseClicked(event -> incrementControls(true,4));
         fourthDownBox.setOnMouseClicked(event -> incrementControls(false,4));
+
+        setupButtonIndicators(firstUpBox, firstUp);
+        setupButtonIndicators(firstDownBox, firstDown);
+        setupButtonIndicators(secondUpBox, secondUp);
+        setupButtonIndicators(secondDownBox, secondDown);
+        setupButtonIndicators(thirdUpBox, thirdUp);
+        setupButtonIndicators(thirdDownBox, thirdDown);
+        setupButtonIndicators(fourthUpBox, fourthUp);
+        setupButtonIndicators(fourthDownBox, fourthDown);
+
+        timerMode.setOnAction(e -> handleTimerModeChange());
     }
+
+
 
     private void initStackPane() {
         // Create the UI components
@@ -59,16 +79,37 @@ public class RingTimerApplication extends Application {
         this.scene = new Scene(root, 400, 400);
         scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/com.example.activitytracker/mainView.css")).toExternalForm());
 
-        // Create the inner circle
+        // Start/stop button & outer ring
         this.innerCircle = new Circle(150, Color.rgb(20,20,20));
-        innerCircle.setId("circle");
-
-        // Create the outer & timer circles
         this.outerCircle = new Circle(155, Color.TRANSPARENT);
-        outerCircle.setId("circle");
-        this.timerCircle = new Circle(155, Color.TRANSPARENT);
         outerCircle.setStroke(Color.GREEN);
-        outerCircle.setStrokeWidth(6);
+        outerCircle.setStrokeWidth(10);
+
+
+        // Arc for timer status
+        final double INSET = 10;
+        final double ARC_RADIUS = 155;
+        final double INITIAL_ARC_LENGTH  = 0;
+        final double ARC_STROKE_WIDTH = 10;
+        final double ARC_REGION_SIZE = ARC_RADIUS * 2 + ARC_STROKE_WIDTH + INSET * 2;
+
+        timerCircle = new Arc(ARC_REGION_SIZE / 2, ARC_REGION_SIZE / 2,
+                ARC_RADIUS, ARC_RADIUS,
+                0, INITIAL_ARC_LENGTH);
+        timerCircle.setStrokeWidth(ARC_STROKE_WIDTH);
+        timerCircle.setStroke(Color.RED);
+        timerCircle.setStartAngle(90);
+        timerCircle.setFill(Color.TRANSPARENT);
+        final double fillSize = ARC_RADIUS * 2 + timerCircle.getStrokeWidth() + INSET * 2;
+        Rectangle fill = new Rectangle(fillSize, fillSize, Color.TRANSPARENT);
+        Group centeredArcGroup = new Group(fill, timerCircle);
+        arcPane = new StackPane(centeredArcGroup);
+        arcPane.setPadding(new Insets(INSET));
+        arcPane.setMinSize(0,0);
+        BorderPane borderPane = new BorderPane();
+        borderPane.setCenter(arcPane);
+
+
 
         // Status text (start/stop)
         this.statusText = new Text("START");
@@ -78,15 +119,16 @@ public class RingTimerApplication extends Application {
         statusText.setStroke(Color.LIGHTGRAY);
 
         // Control box
-        this.ctrlBox = new Rectangle(150,80);
+        this.ctrlBox = new Rectangle(150,100);
         ctrlBox.setFill(Color.WHITE);
         ctrlBox.setStroke(Color.LIGHTGRAY);
         ctrlBox.setStrokeWidth(4);
-        ctrlBox.setTranslateY(60);
+        ctrlBox.setTranslateY(70);
         ctrlBox.setArcHeight(15);
         ctrlBox.setArcWidth(15);
 
         // Control box buttons and output
+        timerMode = new CheckBox("Timer mode");
         this.topDot = new Circle(3, Color.BLACK);
         this.bottomDot = new Circle(3, Color.BLACK);
         this.firstUp = createTriangleButton(true);
@@ -97,6 +139,7 @@ public class RingTimerApplication extends Application {
         this.secondDown = createTriangleButton(false);
         this.thirdDown = createTriangleButton(false);
         this.fourthDown = createTriangleButton(false);
+        timerMode.setTranslateY(105);
         topDot.setTranslateY(50);
         bottomDot.setTranslateY(70);
         firstUp.setTranslateY(35);
@@ -158,20 +201,80 @@ public class RingTimerApplication extends Application {
         hoursField.setTranslateX(-20);
         minutesField.setTranslateX(50);
 
+        Image resetImg = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com.example.activitytracker/png/reset_small.png")));
+        resetButton = new ImageView(resetImg);
+        resetButton.setTranslateY(92);
+        resetButton.setTranslateX(55);
+
+
+        handleTimerModeChange();
+
+
+
+
+
         // Add everything to the stack pane
-        root.getChildren().addAll(outerCircle, timerCircle, innerCircle, statusText,
-                ctrlBox, firstUp, secondUp, thirdUp, fourthUp, firstDown, secondDown, thirdDown, fourthDown, topDot, bottomDot, tenHoursField, tenMinutesField, hoursField, minutesField, firstUpBox, secondUpBox, thirdUpBox, fourthUpBox, firstDownBox, secondDownBox, thirdDownBox, fourthDownBox);
+        root.getChildren().addAll(outerCircle, borderPane, innerCircle, statusText,
+                ctrlBox, firstUp, secondUp, thirdUp, fourthUp, firstDown, secondDown, thirdDown, fourthDown,
+                topDot, bottomDot, tenHoursField, tenMinutesField, hoursField, minutesField,
+                firstUpBox, secondUpBox, thirdUpBox, fourthUpBox, firstDownBox, secondDownBox, thirdDownBox, fourthDownBox,
+                timerMode, resetButton);
+    }
+
+
+
+    private void resizeControlBox(double width, double height) {
+        ctrlBox.setWidth(width);
+        ctrlBox.setHeight(height);
+    }
+    private void handleTimerModeChange() {
+        if (timerMode.isSelected()) {
+            ctrlBox.setTranslateY(70);
+            timerMode.setTranslateX(0);
+            setControlVisibility(true);
+            setResetVisibility(false);
+        } else {
+            ctrlBox.setTranslateY(70);
+            resizeControlBox(150, 75);
+            timerMode.setTranslateX(-20);
+            setControlVisibility(false);
+            setResetVisibility(true);
+            resetTimerDisplay(); // Reset the timer display when switching to !timerMode
+        }
+        root.requestLayout();
+    }
+
+    private void setResetVisibility(boolean state) {
+        resetButton.setVisible(state);
+        resetButton.setDisable(!state);
+    }
+
+    private void setupButtonIndicators(Rectangle box, Polygon button) {
+        box.setOnMouseEntered(e -> buttonIndicator(true, button));
+        box.setOnMouseExited(e -> buttonIndicator(false, button));
+    }
+    private void buttonIndicator(boolean mouseEntered, Polygon button) {
+        if (mouseEntered) {
+            button.setStroke(Color.GREY);
+        } else {
+            button.setStroke(Color.BLACK);
+        }
+        root.requestLayout();
     }
 
     private void toggleClock() {
         if (statusText.getText().equals("START")) {
-
             statusText.setText("STOP");
+            startTimer();
+
         } else {
             statusText.setText("START");
+            stopTimer();
         }
         root.requestLayout();
     }
+
+
     // Inc or dec the first field in clock controls
     private void incrementControls(boolean inc, int field) {
         System.out.println(String.valueOf(inc)+" inc for field: "+String.valueOf(field));
@@ -226,13 +329,137 @@ public class RingTimerApplication extends Application {
         }
 
         triangleButton.setFill(Color.BLACK);
+        triangleButton.setStroke(Color.BLACK);
+        triangleButton.setStrokeWidth(2);
         return triangleButton;
     }
+
+    private void setControlVisibility(boolean state) {
+        if (state) {
+            resizeControlBox(150, 100);
+            timerMode.setTranslateY(105);
+        }
+        else {
+            resizeControlBox(150, 75);
+            timerMode.setTranslateY(90);
+        }
+        firstUp.setVisible(state);
+        firstUpBox.setDisable(!state);
+        firstDown.setVisible(state);
+        firstDownBox.setDisable(!state);
+        secondUp.setVisible(state);
+        secondUpBox.setDisable(!state);
+        secondDown.setVisible(state);
+        secondDownBox.setDisable(!state);
+        thirdUp.setVisible(state);
+        thirdUpBox.setDisable(!state);
+        thirdDown.setVisible(state);
+        thirdDownBox.setDisable(!state);
+        fourthUp.setVisible(state);
+        fourthUpBox.setDisable(!state);
+        fourthDown.setVisible(state);
+        fourthDownBox.setDisable(!state);
+    }
+    private void startTimer() {
+        System.out.println("Starting timer");
+        setControlVisibility(false);
+        timerMode.setDisable(true);
+
+        // Ensure that timeline is initialized here before using it.
+        if (timeline != null) {
+            timeline.stop();
+            System.out.println("Existing timeline stopped");
+        }
+        timeline = new Timeline();  // Ensure timeline is initialized before any possible use
+
+        int totalSeconds = getCurrentControlsValue();
+        if (!timerMode.isSelected()) {
+            System.out.println("Timer mode: Indefinite (count up)");
+            timeLeft = Duration.seconds(0);
+            timerCircle.setLength(360); // Set arc to full circle when counting up starts
+            KeyFrame keyFrame = new KeyFrame(Duration.millis(10), e -> {
+                timeLeft = timeLeft.add(Duration.millis(10));
+                updateTimerDisplay(timeLeft); // Display the current elapsed time
+            });
+            timeline.getKeyFrames().add(keyFrame);
+        } else {
+            if (totalSeconds <= 0) {
+                System.out.println("Total seconds must be greater than zero to start the timer.");
+                timerMode.setDisable(false);
+                setControlVisibility(true);
+                return;
+            }
+            timeLeft = Duration.seconds(totalSeconds);
+            KeyFrame keyFrame = new KeyFrame(Duration.millis(10), e -> {
+                timeLeft = timeLeft.subtract(Duration.millis(10));
+                double totalMilliseconds = totalSeconds * 1000;
+                double currentMillisecondsLeft = timeLeft.toMillis();
+                double currentLength = 360 - ((currentMillisecondsLeft / totalMilliseconds) * 360);
+                timerCircle.setLength(currentLength);
+
+                if (currentMillisecondsLeft <= 0) {
+                    timeline.stop();
+                    timerCircle.setLength(0);
+                    statusText.setText("START");
+                    setControlVisibility(true);
+                    timerMode.setDisable(false);
+                    System.out.println("Timer reached zero and stopped");
+                }
+                updateTimerDisplay(timeLeft);
+            });
+            timeline.getKeyFrames().add(keyFrame);
+        }
+
+        timeline.setCycleCount(Timeline.INDEFINITE);
+        timeline.play();
+        System.out.println("Timeline started");
+    }
+
+    private void updateTimerDisplay(Duration duration) {
+        // Update your clock display based on the duration left
+        long totalSeconds = (long) duration.toSeconds();
+        long hours = totalSeconds / 3600;
+        long minutes = (totalSeconds % 3600) / 60;
+        long seconds = totalSeconds % 60;
+
+        // Update display
+        tenHoursField.setText(String.valueOf(hours / 10));
+        hoursField.setText(String.valueOf(hours % 10));
+        tenMinutesField.setText(String.valueOf(minutes / 10));
+        minutesField.setText(String.valueOf(minutes % 10));
+        root.requestLayout();
+    }
+
+    private void stopTimer() {
+        if (timeline != null) {
+            timeline.stop(); // Stop the timeline
+        }
+        if (!timerMode.isSelected()) {
+            timerCircle.setLength(360); // Reset to full circle for count up mode
+            timeLeft = Duration.ZERO; // Reset time to 0
+            updateTimerDisplay(timeLeft); // Update display to show 0
+        } else {
+            timerCircle.setLength(0); // Clear the arc when countdown stops
+        }
+        statusText.setText("START");
+        setControlVisibility(true);
+        timerMode.setDisable(false);
+        System.out.println("Timer stopped");
+    }
+
+    private void resetTimerDisplay() {
+        // Reset the text fields or labels to the initial state
+        tenHoursField.setText("0");
+        hoursField.setText("0");
+        tenMinutesField.setText("0");
+        minutesField.setText("0");
+        root.requestLayout();
+    }
     private int getCurrentControlsValue() {
-        int tenHours = Integer.parseInt(tenHoursField.getText())*1000;
-        int hours = Integer.parseInt(hoursField.getText())*100;
-        int tenMinutes = Integer.parseInt(tenMinutesField.getText());
-        int minutes = Integer.parseInt(minutesField.getText());
-        return tenHours + hours + tenMinutes + minutes;
+        int tenHours = Integer.parseInt(tenHoursField.getText()) * 10 * 3600;
+        int hours = Integer.parseInt(hoursField.getText()) * 3600;
+        int tenMinutes = Integer.parseInt(tenMinutesField.getText()) * 10 * 60;
+        int minutes = Integer.parseInt(minutesField.getText()) * 60;
+        return tenHours + hours + tenMinutes + minutes; // Return value in seconds
     }
 }
