@@ -14,6 +14,7 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.regex.Pattern;
 
 public class SignupController {
 
@@ -61,12 +62,16 @@ public class SignupController {
         String password = enterPassword.getText();
         String confirmPassword = enterPasswordConfirm.getText();
 
-        // Check if password and confirmPassword match
-        if (!password.equals(confirmPassword)) {
-            // Handle password mismatch (optional)
-            System.out.println("Password and confirm password do not match.");
+
+        boolean emailValid = validateEmail(email);
+        boolean passValid = validatePassword(password);
+        boolean confPassValid = validateConfPassword(password, confirmPassword);
+        if (!(emailValid && passValid && confPassValid)) {
+            System.out.print(String.format("SIGNUP FAILED: email - %s, pass - %s, confPass - %s\n", emailValid, passValid, confPassValid));
             return;
         }
+
+
 
         // Create a new Contact object with the entered values
         Contact newContact = new Contact(email, password, confirmPassword);
@@ -87,6 +92,20 @@ public class SignupController {
         Contact newContact = new Contact(DEFAULT_email, DEFAULT_password, DEFAULT_passwordConfirm);
         // add user to database
         contactDAO.addContact(newContact);
+    }
+
+    private boolean validateEmail(String email) {
+        return Pattern.matches("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$", email);
+    }
+    private boolean validatePassword(String pass) {
+        return Pattern.matches("^(?=.*\\d)(?=.*[!@#$%^&*()\\[\\]{};':\",./<>?\\\\|~`\\-=_+])(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$", pass);
+    }
+    private boolean validateConfPassword(String pass, String confPass) {
+        return confPass.equals(pass);
+    }
+
+    private void testValidation() {
+
     }
 }
 

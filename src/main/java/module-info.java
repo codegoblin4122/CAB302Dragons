@@ -4,11 +4,15 @@ module com.example.cab302 {
     requires javafx.graphics;
     requires java.sql;
     requires java.desktop;
+    requires org.junit.jupiter.api;
+
+
+
 //    requires mysql.connector.j;
 
 
-    opens com.example.cab302 to javafx.fxml;
     exports com.example.cab302;
+    opens com.example.cab302 to javafx.fxml, org.junit.jupiter.api;
     exports com.example.cab302.controller;
     opens com.example.cab302.controller to javafx.fxml;
 }
