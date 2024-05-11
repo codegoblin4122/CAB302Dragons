@@ -8,37 +8,39 @@
 <?import javafx.scene.effect.InnerShadow?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.shape.Circle?>
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane fx:id="Scene1AnchorPane" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.cab302.controller.HelloController">
    <children>
-      <BorderPane fx:id="LoginPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="520.0">
+      <BorderPane fx:id="LoginPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="360.0" prefWidth="640.0">
          <left>
-            <AnchorPane minWidth="-Infinity" prefHeight="400.0" prefWidth="213.0" style="-fx-background-color: #263F73;" BorderPane.alignment="CENTER">
+            <AnchorPane minWidth="-Infinity" prefHeight="360.0" prefWidth="317.0" style="-fx-background-color: #263F73;" BorderPane.alignment="CENTER">
                <children>
-                  <Label alignment="CENTER" layoutX="1.0" layoutY="138.0" prefHeight="32.0" prefWidth="213.0" text="Screen Timer" textFill="WHITE">
+                  <Label alignment="CENTER" layoutX="52.0" layoutY="78.0" prefHeight="32.0" prefWidth="213.0" text="Screen Timer" textFill="WHITE">
                      <font>
                         <Font name="Arial" size="22.0" />
                      </font>
                   </Label>
-                  <Label alignment="CENTER" layoutX="1.0" layoutY="82.0" prefHeight="38.0" prefWidth="211.0" text="CAB302 Dragons" textFill="WHITE">
+                  <Label alignment="CENTER" layoutX="53.0" layoutY="30.0" prefHeight="38.0" prefWidth="211.0" text="CAB302 Dragons" textFill="WHITE">
                      <font>
                         <Font name="Arial" size="25.0" />
                      </font>
                   </Label>
-                  <Line endX="37.0" layoutX="139.0" layoutY="130.0" startX="-100.0" stroke="WHITE" strokeWidth="2.0">
+                  <Line endX="37.0" layoutX="190.0" layoutY="68.0" startX="-100.0" stroke="WHITE" strokeWidth="2.0">
                      <effect>
                         <DropShadow />
                      </effect>
                   </Line>
+                  <Circle fill="DODGERBLUE" layoutX="159.0" layoutY="228.0" radius="110.0" stroke="BLACK" strokeType="INSIDE" />
                </children>
             </AnchorPane>
          </left>
          <right>
-            <AnchorPane prefHeight="400.0" prefWidth="332.0" BorderPane.alignment="CENTER">
+            <AnchorPane prefHeight="360.0" prefWidth="241.0" BorderPane.alignment="CENTER">
                <children>
-                  <Label alignment="CENTER" layoutX="-1.0" layoutY="45.0" prefHeight="38.0" prefWidth="307.0" text="Secure Login">
+                  <Label alignment="CENTER" layoutX="-1.0" layoutY="45.0" prefHeight="38.0" prefWidth="307.0" text="Login">
                      <font>
                         <Font name="Arial" size="25.0" />
                      </font>
