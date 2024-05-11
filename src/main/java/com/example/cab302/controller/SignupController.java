@@ -75,18 +75,19 @@ public class SignupController {
         newContact.setPasswordConfirm(confirmPassword);
 
         // Update the contact in the database
-        contactDAO.updateContact(newContact);
+        contactDAO.addContact(new Contact(email, password, confirmPassword));
     }
 
-        @FXML
-    private void onAdd() {
-        // default values for a new user
-        final String DEFAULT_email = "test";
-        final String DEFAULT_password = "password";
-        final String DEFAULT_passwordConfirm = "password";
-        Contact newContact = new Contact(DEFAULT_email, DEFAULT_password, DEFAULT_passwordConfirm);
-        // add user to database
-        contactDAO.addContact(newContact);
-    }
+    // Adds a test user to the db
+//        @FXML
+//    private void onClickSignUp() {
+//        // default values for a new user
+//        final String DEFAULT_email = "test";
+//        final String DEFAULT_password = "password";
+//        final String DEFAULT_passwordConfirm = "password";
+//        Contact newContact = new Contact(DEFAULT_email, DEFAULT_password, DEFAULT_passwordConfirm);
+//        // add user to database
+//        contactDAO.addContact(newContact);
+//    }
 }
 
