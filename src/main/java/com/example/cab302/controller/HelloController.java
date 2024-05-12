@@ -85,6 +85,15 @@ public class HelloController {
         Scene scene = new Scene(fxmlLoader.load(), Main.WIDTH, Main.HEIGHT);
         stage.setScene(scene);
     }
+    @FXML
+    private Button resetPasswordButton;
+    @FXML
+    protected void switchToResetPassword() throws IOException {
+        Stage stage = (Stage) resetPasswordButton.getScene().getWindow();
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("view/ResetPassword.fxml"));
+        Scene scene = new Scene(fxmlLoader.load(), Main.WIDTH, Main.HEIGHT);
+        stage.setScene(scene);
+    }
 
     @FXML
     protected void loginButtonOnAction() {
@@ -109,4 +118,6 @@ public class HelloController {
             System.out.print("login failed");
         }
     }
+
+
 }

@@ -22,12 +22,23 @@ public class TimerController {
     private RingTimer ringTimer;
 
     @FXML
+    private Button backToLoginButton;
+
+
+    @FXML
     public void initialize() {
         ringTimer = new RingTimer();
         timerContainer.getChildren().add(ringTimer.getRoot());
 
     }
 
+    @FXML
+    protected void switchSceneToLogin() throws IOException {
+        Stage stage = (Stage) backToLoginButton.getScene().getWindow();
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("view/hello-view.fxml"));
+        Scene scene = new Scene(fxmlLoader.load(), Main.WIDTH, Main.HEIGHT);
+        stage.setScene(scene);
+    }
     @FXML
     private void handleBackButtonAction() throws IOException {
         Stage stage = (Stage) backButton.getScene().getWindow();
