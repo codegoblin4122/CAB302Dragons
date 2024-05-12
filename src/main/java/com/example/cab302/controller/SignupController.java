@@ -16,6 +16,8 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.regex.Pattern;
 
+import static com.example.cab302.utils.InputValidation.*;
+
 public class SignupController {
 
     @FXML
@@ -92,20 +94,6 @@ public class SignupController {
         Contact newContact = new Contact(DEFAULT_email, DEFAULT_password, DEFAULT_passwordConfirm);
         // add user to database
         contactDAO.addContact(newContact);
-    }
-
-    private boolean validateEmail(String email) {
-        return Pattern.matches("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$", email);
-    }
-    private boolean validatePassword(String pass) {
-        return Pattern.matches("^(?=.*\\d)(?=.*[!@#$%^&*()\\[\\]{};':\",./<>?\\\\|~`\\-=_+])(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$", pass);
-    }
-    private boolean validateConfPassword(String pass, String confPass) {
-        return confPass.equals(pass);
-    }
-
-    private void testValidation() {
-
     }
 }
 

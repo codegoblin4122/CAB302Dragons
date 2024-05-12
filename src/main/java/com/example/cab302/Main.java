@@ -10,8 +10,8 @@ import java.io.IOException;
 public class Main extends Application {
 
     public static final String TITLE = "CAB302 Dragons";
-    public static final int WIDTH = 640;
-    public static final int HEIGHT = 360;
+    public static final int WIDTH = 1200;
+    public static final int HEIGHT = 800;
 
     @Override
     public void start(Stage stage) throws IOException {

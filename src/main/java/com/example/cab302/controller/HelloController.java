@@ -1,11 +1,13 @@
 package com.example.cab302.controller;
 
 import com.example.cab302.Main;
+import com.example.cab302.RingTimer;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.scene.control.TextField;
 import javafx.scene.control.PasswordField;
@@ -17,7 +19,6 @@ import java.sql.Statement;
 import java.sql.ResultSet;
 
 public class HelloController {
-
     @FXML
     private Button signUpButton;
 
@@ -38,7 +39,6 @@ public class HelloController {
 
     @FXML
     private TextField usernameTextField;
-
 
     @FXML
     protected void cancelButtonOnAction() {
@@ -87,8 +87,26 @@ public class HelloController {
     }
 
     @FXML
-    protected void loginButtonOnAction() throws IOException {
-        Stage stage = (Stage) cancelButton.getScene().getWindow();
-        stage.close();
+    protected void loginButtonOnAction() {
+        System.out.print("Logging in");
+        try {
+            // Get the current stage from the login button
+            Stage stage = (Stage) loginButton.getScene().getWindow();
+
+            // Load the timer scene
+            FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("view/TimerView.fxml"));
+            if (fxmlLoader.getLocation() == null) {
+                System.out.println("Error loading the FXML file.");
+                return;
+            }
+            Scene scene = new Scene(fxmlLoader.load(), Main.WIDTH, Main.HEIGHT);
+
+            // Set the new scene on the current stage
+            stage.setScene(scene);
+            stage.setTitle("Ring Timer");
+            System.out.print("login successful");
+        } catch (IOException e) {
+            System.out.print("login failed");
+        }
     }
 }

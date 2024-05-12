@@ -2,7 +2,6 @@ package com.example.cab302;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -15,14 +14,14 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
 import javafx.util.Duration;
 
+import java.net.URL;
 import java.util.Objects;
 
 
 
-public class RingTimerApplication extends Application {
+public class RingTimer {
     private StackPane root;
     private Scene scene;
     private Circle innerCircle, outerCircle, topDot, bottomDot;
@@ -39,13 +38,9 @@ public class RingTimerApplication extends Application {
     private CheckBox timerMode;
     private ImageView resetButton;
 
-    @Override
-    public void start(Stage primaryStage) {
+    public RingTimer() {
 
         initStackPane();
-
-        primaryStage.setScene(scene);
-        primaryStage.show();
 
 
         // Start the animation when the button is clicked
@@ -78,8 +73,7 @@ public class RingTimerApplication extends Application {
         // Create the UI components
         this.root = new StackPane();
         this.scene = new Scene(root, 400, 400);
-        scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/com/example/cab302/view/clockView.css")).toExternalForm());
-
+        scene.getStylesheets().add(Objects.requireNonNull(Main.class.getResource("view/clockView.css")).toExternalForm());
         // Start/stop button & outer ring
         this.innerCircle = new Circle(150, Color.rgb(20,20,20));
         this.outerCircle = new Circle(155, Color.TRANSPARENT);
@@ -462,5 +456,8 @@ public class RingTimerApplication extends Application {
         int tenMinutes = Integer.parseInt(tenMinutesField.getText()) * 10 * 60;
         int minutes = Integer.parseInt(minutesField.getText()) * 60;
         return tenHours + hours + tenMinutes + minutes; // Return value in seconds
+    }
+    public StackPane getRoot() {
+        return root;
     }
 }
