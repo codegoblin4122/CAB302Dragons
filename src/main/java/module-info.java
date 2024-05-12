@@ -14,5 +14,6 @@ module com.example.cab302 {
     exports com.example.cab302;
     opens com.example.cab302 to javafx.fxml, org.junit.jupiter.api;
     exports com.example.cab302.controller;
+    exports com.example.cab302.model;
     opens com.example.cab302.controller to javafx.fxml;
 }

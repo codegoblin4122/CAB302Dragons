@@ -80,7 +80,7 @@ public class SignupController {
         newContact.setPasswordConfirm(confirmPassword);
 
         // Update the contact in the database
-        contactDAO.updateContact(newContact);
+        contactDAO.addContact(new Contact(email, password, confirmPassword));
     }
 
         @FXML
