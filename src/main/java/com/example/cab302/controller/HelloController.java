@@ -17,7 +17,10 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.Statement;
 import java.sql.ResultSet;
-
+/**
+ * Controller for the main application login view.
+ * Handles user interactions for login, signup, password reset, and exiting the application.
+ */
 public class HelloController {
     @FXML
     private Button signUpButton;
@@ -40,6 +43,11 @@ public class HelloController {
     @FXML
     private TextField usernameTextField;
 
+    @FXML
+    private Button resetPasswordButton;
+    /**
+     * Closes the application window when the cancel button is clicked.
+     */
     @FXML
     protected void cancelButtonOnAction() {
         Stage stage = (Stage) cancelButton.getScene().getWindow();
@@ -77,7 +85,10 @@ public class HelloController {
 //            e.printStackTrace();
 //        }
 //    }
-
+    /**
+     * Navigates to the signup view when the signup button is clicked.
+     * @throws IOException if the Signup.fxml file cannot be loaded.
+     */
     @FXML
     protected void SwitchToSignUp() throws IOException {
         Stage stage = (Stage) signUpButton.getScene().getWindow();
@@ -86,15 +97,20 @@ public class HelloController {
         stage.setScene(scene);
     }
     @FXML
-    private Button resetPasswordButton;
-    @FXML
+    /**
+     * Navigates to the reset password view when the reset password button is clicked.
+     * @throws IOException if the ResetPassword.fxml file cannot be loaded.
+     */
     protected void switchToResetPassword() throws IOException {
         Stage stage = (Stage) resetPasswordButton.getScene().getWindow();
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("view/ResetPassword.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), Main.WIDTH, Main.HEIGHT);
         stage.setScene(scene);
     }
-
+    /**
+     * Handles user login actions and navigates to the main application view upon successful login.
+     * Currently, this method does not perform any actual authentication.
+     */
     @FXML
     protected void loginButtonOnAction() {
         System.out.print("Logging in");

@@ -7,11 +7,15 @@ import java.util.regex.Pattern;
 import static com.example.cab302.utils.InputValidation.*;
 import static org.junit.jupiter.api.Assertions.*;
 import com.example.cab302.utils.InputValidation;
-
-
+/**
+ * Tests the email validation logic provided by the InputValidation class.
+ * This class contains unit tests to verify both valid and invalid email scenarios.
+ */
 public class InputValTest {
-
-
+    /**
+     * Tests a variety of valid email formats to ensure they are correctly recognized as valid.
+     * These emails include examples with different domain formats, use of special characters, and subdomains.
+     */
     @Test
     void testValidEmails() {
         assertTrue(validateEmail("example@example.com"));
@@ -31,7 +35,10 @@ public class InputValTest {
         assertTrue(validateEmail("email@example.co.jp"));
         assertTrue(validateEmail("firstname-lastname@example.com"));
     }
-
+    /**
+     * Tests various invalid email formats to ensure they are correctly recognized as invalid.
+     * These emails include common mistakes and unusual constructs not permitted in standard email formats.
+     */
     @Test
     void testInvalidEmails() {
         assertFalse(validateEmail("plainaddress"));

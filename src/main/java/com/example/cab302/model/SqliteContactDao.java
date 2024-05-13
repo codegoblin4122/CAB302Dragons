@@ -6,16 +6,25 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-
+/**
+ * Implements the IContactDAO interface with a SQLite database backend.
+ * This class provides the database operations required to manage contacts including
+ * creation, addition, and retrieval of contact information from a SQLite table.
+ */
 public class SqliteContactDao implements IContactDAO {
-
     private Connection connection = SqliteConnection.getInstance();
-
-
+    /**
+     * Constructs a new SqliteContactDao.
+     * Ensures the necessary table for storing contacts exists upon instantiation.
+     */
     public SqliteContactDao() {
         createTable();
     }
-
+    /**
+     * Creates the contacts table in the SQLite database if it does not already exist.
+     * This method ensures that the application can operate with the database
+     * even if starting with a new or empty database file.
+     */
     private void createTable() {
         String createQuery = "CREATE TABLE IF NOT EXISTS contacts ("
                 + "id INTEGER PRIMARY KEY AUTOINCREMENT,"
@@ -30,7 +39,6 @@ public class SqliteContactDao implements IContactDAO {
             e.printStackTrace();
         }
     }
-
 //    private void insertSampleData() {
 //        try {
 //            // Clear before inserting
@@ -47,7 +55,10 @@ public class SqliteContactDao implements IContactDAO {
 //            e.printStackTrace();
 //        }
 //    }
-
+    /**
+     * Adds a new contact to the database.
+     * @param contact The Contact object containing the email, password, and password confirmation.
+     */
     @Override
     public void addContact(Contact contact) {
         try {
