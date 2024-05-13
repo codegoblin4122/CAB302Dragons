@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<StackPane xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.cab302.controller.TimerController">
+    <VBox alignment="CENTER" spacing="20">
+        <Text text="Ring Timer" />
+        <StackPane fx:id="timerContainer" prefHeight="300" prefWidth="300" />
+        <Button fx:id="toggleButton" minHeight="25.0" prefWidth="300.0" style="-fx-background-color: #263F73;" text="Start/Stop" textFill="WHITE" />
+        <Button fx:id="backToLoginButton" minHeight="25.0" onAction="#switchSceneToLogin" prefWidth="300.0" style="-fx-background-color: #263F73;" text="Back to Login" textFill="WHITE" />
+    </VBox>
+</StackPane>
