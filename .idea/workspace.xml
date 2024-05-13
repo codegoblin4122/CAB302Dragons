@@ -4,7 +4,24 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="836ab5e4-d75c-4725-9fcd-051d1162fc3a" name="Changes" comment="" />
+    <list default="true" id="836ab5e4-d75c-4725-9fcd-051d1162fc3a" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/xerial_sqlite_jdbc.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/contacts.db" beforeDir="false" afterPath="$PROJECT_DIR$/contacts.db" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/cab302/controller/SignupController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/cab302/controller/SignupController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/com/example/cab302/view/Signup.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/example/cab302/view/Signup.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/cab302/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/cab302/Main.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/cab302/controller/HelloController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/cab302/controller/HelloController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/cab302/controller/SignupController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/cab302/controller/SignupController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/cab302/model/Contact.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/cab302/model/Contact.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/cab302/model/SqliteConnection.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/cab302/model/SqliteConnection.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/cab302/model/SqliteContactDao.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/cab302/model/SqliteContactDao.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/cab302/view/ResetPassword.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/cab302/view/ResetPassword.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/cab302/view/Signup.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/cab302/view/Signup.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/cab302/view/hello-view.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/cab302/view/hello-view.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/module-info.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/module-info.class" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -13,16 +30,9 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="MavenImportPreferences">
-    <option name="generalSettings">
-      <MavenGeneralSettings>
-        <option name="mavenHomeTypeForPersistence" value="WRAPPER" />
-      </MavenGeneralSettings>
-    </option>
-  </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 8
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 8
+}</component>
   <component name="ProjectId" id="2frGi83weQ4Kxny2pvANYylpnpI" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -30,16 +40,25 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "Application.Main.executor": "Run",
+    "Downloaded.Files.Path.Enabled": "false",
+    "Repository.Attach.Annotations": "false",
+    "Repository.Attach.JavaDocs": "false",
+    "Repository.Attach.Sources": "false",
     "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "ignore.virus.scanning.warn.message": "true",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/Admin/Documents/GitHub/CAB302Dragons"
+    "last_opened_file_path": "C:/Users/Martin/Documents/GitHub/address-book",
+    "project.structure.last.edited": "Libraries",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2"
   }
 }]]></component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="836ab5e4-d75c-4725-9fcd-051d1162fc3a" name="Changes" comment="" />
+      <changelist id="178df519-5420-46cc-a764-8ba68492ee64" name="Changes" comment="" />
       <created>1714551908088</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
@@ -58,7 +77,7 @@
                   <entry key="branch">
                     <value>
                       <list>
-                        <option value="origin/Chelz" />
+                        <option value="origin/main" />
                       </list>
                     </value>
                   </entry>

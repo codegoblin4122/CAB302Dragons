@@ -73,8 +73,38 @@ public class SignupController {
      * Validates the email and password, and adds a new contact to the database if valid.
      * @throws IOException If an I/O error occurs during the process.
      */
+
     @FXML
     private void onClickSignUp() throws IOException {
+        // Get the values from the text fields
+
+        String email = emailField.getText();
+        String password = enterPassword.getText();
+        String confirmPassword = enterPasswordConfirm.getText();
+
+//        boolean emailValid = validateEmail(email);
+//        boolean passValid = validatePassword(password);
+//        boolean confPassValid = validateConfPassword(password, confirmPassword);
+//        if (!(emailValid && passValid && confPassValid)) {
+//            System.out.print(String.format("SIGNUP FAILED: email - %s, pass - %s, confPass - %s\n", emailValid, passValid, confPassValid));
+//            return;
+//        }
+
+        // Check if password and confirmPassword match
+        if (!password.equals(confirmPassword)) {
+            // Handle password mismatch (optional)
+            System.out.println("Password and confirm password do not match.");
+            return;
+        }
+
+        // Create a new Contact object with the entered values
+        Contact newContact = new Contact(email, password, confirmPassword);
+        newContact.setEmail(email);
+        newContact.setPassword(password);
+        newContact.setPasswordConfirm(confirmPassword);
+
+        // Update the contact in the database
+        contactDAO.addContact(new Contact(email, password, confirmPassword));
         // Implementation of onClickSignUp
     }
 
@@ -84,6 +114,13 @@ public class SignupController {
      */
     @FXML
     private void onAdd() {
+        // default values for a new user
+        final String DEFAULT_email = "test";
+        final String DEFAULT_password = "password";
+        final String DEFAULT_passwordConfirm = "password";
+        Contact newContact = new Contact(DEFAULT_email, DEFAULT_password, DEFAULT_passwordConfirm);
+        // add user to database
+        contactDAO.addContact(newContact);
         // Implementation of onAdd
     }
 }
