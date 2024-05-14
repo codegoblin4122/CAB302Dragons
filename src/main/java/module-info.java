@@ -1,6 +1,7 @@
 module com.example.cab302 {
     requires javafx.controls;
     requires javafx.fxml;
+    requires com.jfoenix;
     requires javafx.graphics;
     requires java.sql;
     requires java.desktop;
