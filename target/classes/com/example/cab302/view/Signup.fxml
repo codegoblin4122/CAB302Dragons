@@ -5,36 +5,29 @@
 <?import javafx.scene.shape.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.cab302.controller.SignupController">
+<AnchorPane xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.cab302.controller.SignupController">
    <children>
-      <BorderPane layoutX="-7.0" prefHeight="360.0" prefWidth="640.0">
+      <BorderPane fx:id="signupPane" prefHeight="800" prefWidth="1200">
          <left>
-            <AnchorPane prefHeight="360.0" prefWidth="222.0" style="-fx-background-color: #263F73;" BorderPane.alignment="CENTER">
+            <AnchorPane prefHeight="800.0" prefWidth="213.0" style="-fx-background-color: #263F73;">
                <children>
-                  <Label layoutX="18.0" layoutY="77.0" text="CAB302 Dragons" textFill="WHITE">
-                     <font>
-                        <Font name="Arial" size="25.0" />
-                     </font></Label>
-                  <Line endX="100.0" layoutX="102.0" layoutY="124.0" startX="-72.0" stroke="WHITE" strokeWidth="2.0" />
-                  <Label layoutX="50.0" layoutY="137.0" text="Screen Timer" textFill="WHITE">
-                     <font>
-                        <Font name="Arial" size="22.0" />
-                     </font></Label>
+                  <Label alignment="CENTER" layoutX="1.0" layoutY="300.0" prefHeight="32.0" prefWidth="213.0" style="-fx-font-size: 25px;" text="CAB302 Dragons" textFill="WHITE" />
+                  <Label alignment="CENTER" layoutX="1.0" layoutY="350.0" prefHeight="32.0" prefWidth="213.0" style="-fx-font-size: 22px;" text="Screen Timer" textFill="WHITE" />
                </children>
             </AnchorPane>
-         </left></BorderPane>
-      <Button fx:id="signUpConfirm" layoutX="333.0" layoutY="304.0" mnemonicParsing="false" onAction="#onClickSignUp" style="-fx-background-color: #263F73;" text="Confirm" textFill="WHITE" />
-      <Button fx:id="LoginButton" layoutX="234.0" layoutY="304.0" mnemonicParsing="false" onAction="#SwitchtoLogin" style="-fx-background-color: #263F73;" text="Back to login" textFill="WHITE" />
-      <PasswordField fx:id="enterPassword" layoutX="241.0" layoutY="180.0" />
-      <PasswordField fx:id="enterPasswordConfirm" layoutX="241.0" layoutY="255.0" />
-      <Label layoutX="241.0" layoutY="75.0" text="Email" />
-      <Label layoutX="241.0" layoutY="150.0" text="Password" />
-      <Label layoutX="241.0" layoutY="225.0" text="Confirm Password" />
-      <Text layoutX="270.0" layoutY="44.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Signup">
-         <font>
-            <Font size="28.0" />
-         </font>
-      </Text>
-      <TextField fx:id="emailField" layoutX="241.0" layoutY="105.0" />
+         </left>
+         <center>
+            <VBox alignment="CENTER" prefHeight="800" prefWidth="600" spacing="20" style="-fx-background-color: #FFFFFF;">
+               <Label style="-fx-font-size: 25px; -fx-text-fill: black;" text="Signup" />
+               <TextField fx:id="emailField" maxWidth="300" promptText="Email" />
+               <PasswordField fx:id="enterPassword" maxWidth="300" promptText="Password" />
+               <PasswordField fx:id="enterPasswordConfirm" maxWidth="300" promptText="Confirm Password" />
+               <Button fx:id="signUpConfirm" onAction="#onClickSignUp" style="-fx-background-color: #263F73; -fx-text-fill: white; -fx-pref-width: 300px;" text="Confirm" />
+               <Button fx:id="LoginButton" onAction="#SwitchtoLogin" style="-fx-background-color: #263F73; -fx-text-fill: white; -fx-pref-width: 300px;" text="Back to login" />
+               <Label fx:id="loginMessageLabel" textFill="RED" />
+            </VBox>
+         </center>
+      </BorderPane>
    </children>
 </AnchorPane>
+

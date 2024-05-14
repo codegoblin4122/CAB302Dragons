@@ -13,16 +13,15 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 
 import java.net.URL;
 import java.util.Objects;
-/**
- * The RingTimer class creates a visual timer with interactive controls.
- * It provides functionalities to start, stop, and reset a timer with adjustable times.
- * The UI includes controls for adjusting time units and displays the countdown or count up time.
- */
+
+
+
 public class RingTimer {
     private StackPane root;
     private Scene scene;
@@ -39,9 +38,7 @@ public class RingTimer {
     private Duration timeLeft;
     private CheckBox timerMode;
     private ImageView resetButton;
-    /**
-     * Constructs a new RingTimer object and initializes its UI components and event handlers.
-     */
+
     public RingTimer() {
 
         initStackPane();
@@ -70,21 +67,19 @@ public class RingTimer {
 
         timerMode.setOnAction(e -> handleTimerModeChange());
     }
-    /**
-     * Initializes the StackPane layout and adds all necessary UI components to it.
-     * This method sets up the visual elements like the circles, arcs, and buttons.
-     */
+
+
+
     private void initStackPane() {
         // Create the UI components
         this.root = new StackPane();
         this.scene = new Scene(root, 400, 400);
-        scene.getStylesheets().add(Objects.requireNonNull(Main.class.getResource("view/clockView.css")).toExternalForm());
         // Start/stop button & outer ring
         this.innerCircle = new Circle(150, Color.rgb(20,20,20));
         this.outerCircle = new Circle(155, Color.TRANSPARENT);
         outerCircle.setStroke(Color.GREEN);
         outerCircle.setStrokeWidth(10);
-
+        root.setPadding(new Insets(20));
 
         // Arc for timer status
         final double INSET = 10;
@@ -110,13 +105,15 @@ public class RingTimer {
         borderPane.setCenter(arcPane);
 
 
-
+        Font boldText = new Font("Roboto", 60);
         // Status text (start/stop)
         this.statusText = new Text("START");
         statusText.setId("bold-text");
+        statusText.setFont(boldText);
         statusText.setTranslateY(-60);
         statusText.setFill(Color.WHITE);
         statusText.setStroke(Color.LIGHTGRAY);
+        statusText.setStrokeWidth(2);
 
         // Control box
         this.ctrlBox = new Rectangle(150,100);
@@ -184,14 +181,16 @@ public class RingTimer {
         fourthDownBox.setTranslateY(80);
         fourthDownBox.setTranslateX(50);
 
+
+        Font controlsText = new Font("Roboto", 40);
         this.tenHoursField = new Text("0");
         this.tenMinutesField = new Text("0");
         this.hoursField = new Text("0");
         this.minutesField = new Text("0");
-        tenHoursField.setId("controls-text");
-        tenMinutesField.setId("controls-text");
-        hoursField.setId("controls-text");
-        minutesField.setId("controls-text");
+        tenHoursField.setFont(controlsText);
+        tenMinutesField.setFont(controlsText);
+        hoursField.setFont(controlsText);
+        minutesField.setFont(controlsText);
         tenHoursField.setTranslateY(58);
         tenMinutesField.setTranslateY(58);
         hoursField.setTranslateY(58);
@@ -220,21 +219,13 @@ public class RingTimer {
                 firstUpBox, secondUpBox, thirdUpBox, fourthUpBox, firstDownBox, secondDownBox, thirdDownBox, fourthDownBox,
                 timerMode, resetButton);
     }
-    /**
-     * Resizes the control box used in the timer's user interface.
-     * Adjusts the width and height of the control box based on provided parameters.
-     *
-     * @param width  The new width to set for the control box.
-     * @param height The new height to set for the control box.
-     */
+
+
+
     private void resizeControlBox(double width, double height) {
         ctrlBox.setWidth(width);
         ctrlBox.setHeight(height);
     }
-    /**
-     * Handles changes in the timer mode (countdown or count up).
-     * This method adjusts UI elements and functionality based on the selected mode.
-     */
     private void handleTimerModeChange() {
         if (timerMode.isSelected()) {
             ctrlBox.setTranslateY(70);
@@ -251,34 +242,16 @@ public class RingTimer {
         }
         root.requestLayout();
     }
-    /**
-     * Sets the visibility and enabled state of the reset button based on the specified state.
-     * When the state is true, the button is visible and enabled; when false, it is invisible and disabled.
-     *
-     * @param state The visibility and enabled state to apply to the reset button.
-     */
+
     private void setResetVisibility(boolean state) {
         resetButton.setVisible(state);
         resetButton.setDisable(!state);
     }
-    /**
-     * Configures event handlers for mouse enter and exit events on the control buttons.
-     * This method sets visual indicators for the button by changing its border color when hovered over.
-     *
-     * @param box The rectangle area that acts as the clickable area for the button.
-     * @param button The polygon shape representing the visual button that changes on hover.
-     */
+
     private void setupButtonIndicators(Rectangle box, Polygon button) {
         box.setOnMouseEntered(e -> buttonIndicator(true, button));
         box.setOnMouseExited(e -> buttonIndicator(false, button));
     }
-    /**
-     * Changes the stroke color of the button based on mouse interaction.
-     * Sets the color to grey when the mouse enters the button area, and back to black when it exits.
-     *
-     * @param mouseEntered True if the mouse has entered the button area, false if it has exited.
-     * @param button The polygon representing the button whose stroke color will be changed.
-     */
     private void buttonIndicator(boolean mouseEntered, Polygon button) {
         if (mouseEntered) {
             button.setStroke(Color.GREY);
@@ -287,10 +260,7 @@ public class RingTimer {
         }
         root.requestLayout();
     }
-    /**
-     * Toggles the timer between a 'running' and 'stopped' state.
-     * Changes the displayed status and controls the timeline of the timer.
-     */
+
     private void toggleClock() {
         if (statusText.getText().equals("START")) {
             statusText.setText("STOP");
@@ -302,11 +272,8 @@ public class RingTimer {
         }
         root.requestLayout();
     }
-    /**
-     * Increments or decrements control values for hours and minutes based on the user interaction.
-     * @param inc Indicates whether to increment (true) or decrement (false) the value.
-     * @param field Specifies which time field to adjust (1 for ten hours, 2 for hours, 3 for ten minutes, 4 for minutes).
-     */
+
+
     // Inc or dec the first field in clock controls
     private void incrementControls(boolean inc, int field) {
         System.out.println(String.valueOf(inc)+" inc for field: "+String.valueOf(field));
@@ -342,11 +309,8 @@ public class RingTimer {
         }
         root.requestLayout();
     }
-    /**
-     * Creates a triangle-shaped button for the timer control UI.
-     * @param facingUp Determines if the triangle points up (true) or down (false).
-     * @return A configured Polygon representing a button.
-     */
+
+
     private Polygon createTriangleButton(boolean facingUp) {
         Polygon triangleButton = new Polygon();
         if (facingUp) {
@@ -368,10 +332,7 @@ public class RingTimer {
         triangleButton.setStrokeWidth(2);
         return triangleButton;
     }
-    /**
-     * Sets the visibility of timer controls.
-     * @param state True to show the controls, false to hide them.
-     */
+
     private void setControlVisibility(boolean state) {
         if (state) {
             resizeControlBox(150, 100);
@@ -398,10 +359,6 @@ public class RingTimer {
         fourthDown.setVisible(state);
         fourthDownBox.setDisable(!state);
     }
-    /**
-     * Starts the timer based on the current settings and timer mode.
-     * Initializes and configures the timeline for animation.
-     */
     private void startTimer() {
         System.out.println("Starting timer");
         setControlVisibility(false);
@@ -456,10 +413,7 @@ public class RingTimer {
         timeline.play();
         System.out.println("Timeline started");
     }
-    /**
-     * Updates the display of the timer based on the current time left.
-     * @param duration The current time left as a Duration object.
-     */
+
     private void updateTimerDisplay(Duration duration) {
         // Update your clock display based on the duration left
         long totalSeconds = (long) duration.toSeconds();
@@ -474,9 +428,7 @@ public class RingTimer {
         minutesField.setText(String.valueOf(minutes % 10));
         root.requestLayout();
     }
-    /**
-     * Stops the timer and updates the UI to reflect this state.
-     */
+
     private void stopTimer() {
         if (timeline != null) {
             timeline.stop(); // Stop the timeline
@@ -493,9 +445,7 @@ public class RingTimer {
         timerMode.setDisable(false);
         System.out.println("Timer stopped");
     }
-    /**
-     * Resets the timer display to its initial state, typically 0 for all fields.
-     */
+
     private void resetTimerDisplay() {
         // Reset the text fields or labels to the initial state
         tenHoursField.setText("0");
@@ -504,10 +454,6 @@ public class RingTimer {
         minutesField.setText("0");
         root.requestLayout();
     }
-    /**
-     * Calculates the total time set on the timer controls in seconds.
-     * @return The total time in seconds.
-     */
     private int getCurrentControlsValue() {
         int tenHours = Integer.parseInt(tenHoursField.getText()) * 10 * 3600;
         int hours = Integer.parseInt(hoursField.getText()) * 3600;
@@ -515,10 +461,6 @@ public class RingTimer {
         int minutes = Integer.parseInt(minutesField.getText()) * 60;
         return tenHours + hours + tenMinutes + minutes; // Return value in seconds
     }
-    /**
-     * Retrieves the root StackPane containing all UI elements of the timer.
-     * @return The root StackPane.
-     */
     public StackPane getRoot() {
         return root;
     }
