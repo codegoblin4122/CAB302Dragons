@@ -8,8 +8,6 @@ module com.example.cab302 {
 
 
 
-//    requires mysql.connector.j;
-
 
     exports com.example.cab302;
     opens com.example.cab302 to javafx.fxml, org.junit.jupiter.api;
