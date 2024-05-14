@@ -1,0 +1,17 @@
+.root {
+    -fx-padding: 20;
+}
+
+#bold-text {
+    -fx-font: 60px Roboto;
+    -fx-stroke-width: 2;
+    -fx-fill: red;
+}
+
+#controls-text {
+    -fx-font: 40px Roboto;
+    -fx-stroke-width: 1;
+    -fx-stroke: black;
+}
+
+

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane fx:id="Scene1AnchorPane" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.cab302.controller.HelloController">
+   <children>
+      <BorderPane fx:id="LoginPane" prefHeight="800" prefWidth="1200">
+         <left>
+            <AnchorPane prefHeight="800.0" prefWidth="213.0" style="-fx-background-color: #263F73;">
+               <children>
+                  <Label alignment="CENTER" layoutX="1.0" layoutY="300.0" prefHeight="32.0" prefWidth="213.0" style="-fx-font-size: 25px;" text="CAB302 Dragons" textFill="WHITE" />
+                  <Label alignment="CENTER" layoutX="1.0" layoutY="350.0" prefHeight="32.0" prefWidth="213.0" style="-fx-font-size: 22px;" text="Screen Timer" textFill="WHITE" />
+               </children>
+            </AnchorPane>
+         </left>
+         <center>
+            <VBox alignment="CENTER" prefHeight="800" prefWidth="600" spacing="20" style="-fx-background-color: #FFFFFF;">
+               <Label style="-fx-font-size: 25px; -fx-text-fill: black;" text="Secure Login" />
+               <TextField fx:id="usernameTextField" maxWidth="300" promptText="Username" />
+               <PasswordField fx:id="passwordPasswordField" maxWidth="300" promptText="Password" />
+               <Button fx:id="loginButton" onAction="#loginButtonOnAction" style="-fx-background-color: #263F73; -fx-text-fill: white; -fx-pref-width: 300px;" text="Login" />
+               <Button fx:id="signUpButton" onAction="#SwitchToSignUp" style="-fx-background-color: #263F73; -fx-text-fill: white; -fx-pref-width: 300px;" text="Sign Up" />
+               <Button fx:id="resetPasswordButton" layoutX="353.0" layoutY="452.0" onAction="#switchToResetPassword" style="-fx-background-color: #263F73; -fx-text-fill: white; -fx-pref-width: 300px;" text="Reset Password" />
+               <Button fx:id="cancelButton" onAction="#cancelButtonOnAction" style="-fx-background-color: #263F73; -fx-text-fill: white; -fx-pref-width: 300px;" text="Cancel" />
+               <Label fx:id="loginMessageLabel" textFill="RED" />
+            </VBox>
+         </center>
+      </BorderPane>
+   </children>
+</AnchorPane>
