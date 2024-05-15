@@ -33,7 +33,7 @@ public class RingTimer {
     private Polygon firstUp, secondUp, thirdUp, fourthUp, firstDown, secondDown, thirdDown, fourthDown;
     private Text tenHoursField, hoursField, tenMinutesField, minutesField ;
 
-    private Rectangle ctrlBox, firstUpBox, secondUpBox, thirdUpBox, fourthUpBox, firstDownBox, secondDownBox, thirdDownBox, fourthDownBox;
+    private Rectangle ctrlBox, firstUpBox, secondUpBox, thirdUpBox, fourthUpBox, firstDownBox, secondDownBox, thirdDownBox, fourthDownBox, resetBox;
     private Timeline timeline;
     private Duration timeLeft;
     private CheckBox timerMode;
@@ -55,6 +55,7 @@ public class RingTimer {
         thirdDownBox.setOnMouseClicked(event -> incrementControls(false,3));
         fourthUpBox.setOnMouseClicked(event -> incrementControls(true,4));
         fourthDownBox.setOnMouseClicked(event -> incrementControls(false,4));
+        resetBox.setOnMouseClicked(e -> resetButtonClick());
 
         setupButtonIndicators(firstUpBox, firstUp);
         setupButtonIndicators(firstDownBox, firstDown);
@@ -64,6 +65,7 @@ public class RingTimer {
         setupButtonIndicators(thirdDownBox, thirdDown);
         setupButtonIndicators(fourthUpBox, fourthUp);
         setupButtonIndicators(fourthDownBox, fourthDown);
+        setupResetIndicator();
 
         timerMode.setOnAction(e -> handleTimerModeChange());
     }
@@ -180,7 +182,11 @@ public class RingTimer {
         this.fourthDownBox = new Rectangle(28,40, Color.TRANSPARENT);
         fourthDownBox.setTranslateY(80);
         fourthDownBox.setTranslateX(50);
-
+        this.resetBox = new Rectangle(25, 25, Color.TRANSPARENT);
+        resetBox.setTranslateY(91);
+        resetBox.setTranslateX(55);
+        resetBox.setArcWidth(20);
+        resetBox.setArcHeight(20);
 
         Font controlsText = new Font("Roboto", 40);
         this.tenHoursField = new Text("0");
@@ -217,7 +223,7 @@ public class RingTimer {
                 ctrlBox, firstUp, secondUp, thirdUp, fourthUp, firstDown, secondDown, thirdDown, fourthDown,
                 topDot, bottomDot, tenHoursField, tenMinutesField, hoursField, minutesField,
                 firstUpBox, secondUpBox, thirdUpBox, fourthUpBox, firstDownBox, secondDownBox, thirdDownBox, fourthDownBox,
-                timerMode, resetButton);
+                timerMode, resetButton, resetBox);
     }
 
 
@@ -251,6 +257,10 @@ public class RingTimer {
     private void setupButtonIndicators(Rectangle box, Polygon button) {
         box.setOnMouseEntered(e -> buttonIndicator(true, button));
         box.setOnMouseExited(e -> buttonIndicator(false, button));
+    }
+    private void setupResetIndicator() {
+        resetBox.setOnMouseEntered(e -> resetBox.setFill(Color.rgb(105, 105, 105, 0.2)));
+        resetBox.setOnMouseExited(e -> resetBox.setFill(Color.TRANSPARENT));
     }
     private void buttonIndicator(boolean mouseEntered, Polygon button) {
         if (mouseEntered) {
@@ -374,7 +384,9 @@ public class RingTimer {
         int totalSeconds = getCurrentControlsValue();
         if (!timerMode.isSelected()) {
             System.out.println("Timer mode: Indefinite (count up)");
-            timeLeft = Duration.seconds(0);
+            if (timeLeft == null) {
+                timeLeft = Duration.seconds(0);
+            }
             timerCircle.setLength(360); // Set arc to full circle when counting up starts
             KeyFrame keyFrame = new KeyFrame(Duration.millis(10), e -> {
                 timeLeft = timeLeft.add(Duration.millis(10));
@@ -431,17 +443,16 @@ public class RingTimer {
 
     private void stopTimer() {
         if (timeline != null) {
-            timeline.stop(); // Stop the timeline
+            timeline.stop(); // Stop the timeline regardless of the timer mode
         }
-        if (!timerMode.isSelected()) {
-            timerCircle.setLength(360); // Reset to full circle for count up mode
+        timerCircle.setLength(0); // Clear the arc when countdown stops
+        if (timerMode.isSelected()) {
             timeLeft = Duration.ZERO; // Reset time to 0
             updateTimerDisplay(timeLeft); // Update display to show 0
-        } else {
-            timerCircle.setLength(0); // Clear the arc when countdown stops
         }
+
         statusText.setText("START");
-        setControlVisibility(true);
+        setControlVisibility(timerMode.isSelected());
         timerMode.setDisable(false);
         System.out.println("Timer stopped");
     }
@@ -453,6 +464,16 @@ public class RingTimer {
         tenMinutesField.setText("0");
         minutesField.setText("0");
         root.requestLayout();
+    }
+
+    private void resetButtonClick() {
+        if (timerMode.isSelected()) return;
+        if (statusText.getText().equals("STOP")) {
+            stopTimer();
+        }
+        timeLeft = Duration.ZERO;
+        updateTimerDisplay(timeLeft);
+        System.out.println("Timer reset to zero");
     }
     private int getCurrentControlsValue() {
         int tenHours = Integer.parseInt(tenHoursField.getText()) * 10 * 3600;
