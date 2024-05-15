@@ -252,6 +252,8 @@ public class RingTimer {
     private void setResetVisibility(boolean state) {
         resetButton.setVisible(state);
         resetButton.setDisable(!state);
+        resetBox.setVisible(state);
+        resetBox.setDisable(!state);
     }
 
     private void setupButtonIndicators(Rectangle box, Polygon button) {
