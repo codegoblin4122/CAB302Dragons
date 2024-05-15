@@ -1,4 +1,4 @@
-package com.example.cab302;
+import com.example.cab302.model.Contact;
 
 import org.junit.jupiter.api.Test;
 

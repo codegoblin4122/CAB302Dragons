@@ -4,7 +4,7 @@ module com.example.cab302 {
     requires javafx.graphics;
     requires java.sql;
     requires java.desktop;
-    requires org.junit.jupiter.api;
+//    requires org.junit.jupiter.api;
 
 
 
