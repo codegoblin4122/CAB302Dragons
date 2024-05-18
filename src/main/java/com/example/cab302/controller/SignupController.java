@@ -13,6 +13,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
+import org.mindrot.jbcrypt.*;
 
 import java.io.IOException;
 import static com.example.cab302.utils.InputValidation.*;
@@ -61,7 +62,6 @@ public class SignupController {
     private void selectContact(Contact contact) {
         emailField.setText(contact.getEmail());
         enterPassword.setText(contact.getPassword());
-        enterPasswordConfirm.setText(contact.getPasswordConfirm());
     }
 
     /**
@@ -90,30 +90,33 @@ public class SignupController {
         String password = enterPassword.getText();
         String confirmPassword = enterPasswordConfirm.getText();
 
-//        boolean emailValid = validateEmail(email);
-//        boolean passValid = validatePassword(password);
-//        boolean confPassValid = validateConfPassword(password, confirmPassword);
-//        if (!(emailValid && passValid && confPassValid)) {
-//            System.out.print(String.format("SIGNUP FAILED: email - %s, pass - %s, confPass - %s\n", emailValid, passValid, confPassValid));
-//            return;
-//        }
-
-        // Check if password and confirmPassword match
-        if (!password.equals(confirmPassword)) {
-            // Handle password mismatch (optional)
-            System.out.println("Password and confirm password do not match.");
+        if (!validateEmail(email)) {
+            loginMessageLabel.setText("Please enter a valid email.");
+            return;
+        }
+        if (!validatePassword(password)) {
+            loginMessageLabel.setText("Please enter a valid password. At least 8 digits, at least one number and one uppercase letter.");
+            return;
+        }
+        if (!validateConfPassword(password, confirmPassword)) {
+            loginMessageLabel.setText("Confirm password does not match password.");
+            return;
+        }
+        if (contactDAO.getContact(email) != null) {
+            System.out.println("User already exists.");
             return;
         }
 
+        // Hash the password
+        String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
+
         // Create a new Contact object with the entered values
-        Contact newContact = new Contact(email, password, confirmPassword);
-        newContact.setEmail(email);
-        newContact.setPassword(password);
-        newContact.setPasswordConfirm(confirmPassword);
+        Contact newContact = new Contact(email, hashedPassword);
 
         // Update the contact in the database
-        contactDAO.addContact(new Contact(email, password, confirmPassword));
+        contactDAO.addContact(newContact);
         // Implementation of onClickSignUp
+        loginMessageLabel.setText("Signup Successful");
     }
 
     /**
@@ -125,8 +128,7 @@ public class SignupController {
         // default values for a new user
         final String DEFAULT_email = "test";
         final String DEFAULT_password = "password";
-        final String DEFAULT_passwordConfirm = "password";
-        Contact newContact = new Contact(DEFAULT_email, DEFAULT_password, DEFAULT_passwordConfirm);
+        Contact newContact = new Contact(DEFAULT_email, DEFAULT_password);
         // add user to database
         contactDAO.addContact(newContact);
         // Implementation of onAdd

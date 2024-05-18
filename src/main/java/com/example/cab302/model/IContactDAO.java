@@ -24,10 +24,10 @@ public interface IContactDAO {
     public void deleteContact(Contact contact);
     /**
      * Retrieves a contact from the database.
-     * @param id The id of the contact to retrieve.
+     * @param email The email of the contact to retrieve.
      * @return The contact with the given id, or null if not found.
      */
-    public Contact getContact(int id);
+    public Contact getContact(String email);
     /**
      * Retrieves all contacts from the database.
      * @return A list of all contacts in the database.
