@@ -6,40 +6,18 @@ package com.example.cab302.model;
  * and password confirmation. It provides getters and setters for each property.
  */
 public class Contact {
-    private int id; // Unique identifier for the contact
     private String email; // Email address of the contact
     private String password; // Password of the contact
-    private String passwordConfirm; // Confirmation of the password for validation purposes
 
     /**
      * Constructs a new Contact with the specified email, password, and password confirmation.
      *
      * @param email            the email address of the contact
      * @param password         the password of the contact
-     * @param passwordConfirm  the password confirmation for verification
      */
-    public Contact(String email, String password, String passwordConfirm) {
+    public Contact(String email, String password) {
         this.email = email;
         this.password = password;
-        this.passwordConfirm = passwordConfirm;
-    }
-
-    /**
-     * Returns the unique identifier for this contact.
-     *
-     * @return the identifier for this contact
-     */
-    public int getId() {
-        return id;
-    }
-
-    /**
-     * Sets the unique identifier for this contact.
-     *
-     * @param id the new identifier for this contact
-     */
-    public void setId(int id) {
-        this.id = id;
     }
 
     /**
@@ -76,23 +54,5 @@ public class Contact {
      */
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    /**
-     * Returns the password confirmation for this contact.
-     *
-     * @return the password confirmation
-     */
-    public String getPasswordConfirm() {
-        return passwordConfirm;
-    }
-
-    /**
-     * Sets the password confirmation for this contact.
-     *
-     * @param passwordConfirm the new password confirmation
-     */
-    public void setPasswordConfirm(String passwordConfirm) {
-        this.passwordConfirm = passwordConfirm;
     }
 }

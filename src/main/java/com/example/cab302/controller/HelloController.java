@@ -2,6 +2,10 @@ package com.example.cab302.controller;
 
 import com.example.cab302.Main;
 import com.example.cab302.RingTimer;
+import com.example.cab302.model.Contact;
+import com.example.cab302.model.IContactDAO;
+import com.example.cab302.model.SqliteContactDao;
+import com.example.cab302.utils.InputValidation;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -12,6 +16,7 @@ import javafx.stage.Stage;
 import javafx.scene.control.TextField;
 import javafx.scene.control.PasswordField;
 import javafx.scene.layout.BorderPane;
+import org.mindrot.jbcrypt.BCrypt;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -45,6 +50,12 @@ public class HelloController {
 
     @FXML
     private Button resetPasswordButton;
+
+    private IContactDAO contactDAO;
+
+    public HelloController() {
+        contactDAO = new SqliteContactDao();
+    }
     /**
      * Closes the application window when the cancel button is clicked.
      */
@@ -112,10 +123,28 @@ public class HelloController {
      * Currently, this method does not perform any actual authentication.
      */
     @FXML
-    protected void loginButtonOnAction() {
-        System.out.print("Logging in");
-        try {
-            // Get the current stage from the login button
+    protected void loginButtonOnAction() throws IOException {
+        String email = usernameTextField.getText();
+        String password = passwordPasswordField.getText();
+
+        if (!InputValidation.validateEmail(email)) {
+            loginMessageLabel.setText("Please enter a valid email");
+            return;
+        }
+
+        if (!InputValidation.validatePassword(password)) {
+            loginMessageLabel.setText("Please enter a valid password");
+            return;
+        }
+        Contact user = contactDAO.getContact(email);
+        if (user == null) {
+            loginMessageLabel.setText("User not found");
+            return;
+        }
+
+
+        if (BCrypt.checkpw(password, user.getPassword())) {
+            System.out.print("Login successful");
             Stage stage = (Stage) loginButton.getScene().getWindow();
 
             // Load the timer scene
@@ -129,9 +158,9 @@ public class HelloController {
             // Set the new scene on the current stage
             stage.setScene(scene);
             stage.setTitle("Ring Timer");
-            System.out.print("login successful");
-        } catch (IOException e) {
-            System.out.print("login failed");
+        } else {
+            System.out.print("Login failed - password incorrect");
+            loginMessageLabel.setText("Password incorrect");
         }
     }
 

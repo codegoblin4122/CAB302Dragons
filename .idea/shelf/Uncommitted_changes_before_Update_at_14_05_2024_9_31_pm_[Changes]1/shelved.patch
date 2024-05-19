@@ -1,0 +1,17 @@
+Index: .github/workflows/maven.yml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+># This workflow will build a Java project with Maven, and cache/restore any dependencies to improve the workflow execution time\r\n# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-maven\r\n\r\n# This workflow uses actions that are not certified by GitHub.\r\n# They are provided by a third-party and are governed by\r\n# separate terms of service, privacy policy, and support\r\n# documentation.\r\n\r\nname: Java CI with Maven\r\n\r\non:\r\n  push:\r\n    branches: [ \"main\" ]\r\n  pull_request:\r\n    branches: [ \"main\" ]\r\n\r\njobs:\r\n  build:\r\n\r\n    runs-on: ubuntu-latest\r\n\r\n    steps:\r\n    - uses: actions/checkout@v4\r\n    - name: Set up JDK 17\r\n      uses: actions/setup-java@v3\r\n      with:\r\n        java-version: '17'\r\n        distribution: 'temurin'\r\n        cache: maven\r\n    - name: Build with Maven\r\n      run: mvn -B package --file pom.xml\r\n    - name: Generate Javadoc\r\n      run: mvn javadoc:javadoc\r\n    - name: Publish Javadoc\r\n      uses: JamesIves/github-pages-deploy-action@v4\r\n      with:\r\n        folder: target/docs/javadoc\r\n    # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive\r\n    - name: Update dependency graph\r\n      uses: advanced-security/maven-dependency-submission-action@571e99aab1055c2e71a1e2309b9691de18d6b7d6\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.github/workflows/maven.yml b/.github/workflows/maven.yml
+--- a/.github/workflows/maven.yml	
++++ b/.github/workflows/maven.yml	
+@@ -35,6 +35,3 @@
+       uses: JamesIves/github-pages-deploy-action@v4
+       with:
+         folder: target/docs/javadoc
+-    # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
+-    - name: Update dependency graph
+-      uses: advanced-security/maven-dependency-submission-action@571e99aab1055c2e71a1e2309b9691de18d6b7d6
