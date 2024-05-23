@@ -4,6 +4,7 @@ import com.example.cab302.Main;
 import com.example.cab302.RingTimer;
 import com.example.cab302.model.Contact;
 import com.example.cab302.model.IContactDAO;
+import com.example.cab302.model.SessionManager;
 import com.example.cab302.model.SqliteContactDao;
 import com.example.cab302.utils.InputValidation;
 import javafx.fxml.FXML;
@@ -145,6 +146,9 @@ public class HelloController {
 
         if (BCrypt.checkpw(password, user.getPassword())) {
             System.out.print("Login successful");
+
+
+
             Stage stage = (Stage) loginButton.getScene().getWindow();
 
             // Load the timer scene
@@ -154,6 +158,8 @@ public class HelloController {
                 return;
             }
             Scene scene = new Scene(fxmlLoader.load(), Main.WIDTH, Main.HEIGHT);
+
+            SessionManager.getInstance().setCurrentUserEmail(email);
 
             // Set the new scene on the current stage
             stage.setScene(scene);

@@ -1,10 +1,11 @@
 package com.example.cab302;
 
+import com.example.cab302.model.SessionManager;
+import com.example.cab302.model.SqliteTrackingDAO;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.geometry.Insets;
 import javafx.scene.Group;
-import javafx.scene.Scene;
 import javafx.scene.control.CheckBox;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -16,18 +17,18 @@ import javafx.scene.shape.*;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
-
-import java.net.URL;
+import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 
 
 public class RingTimer {
+    private final boolean debug = false;
     private StackPane root;
-    private Scene scene;
-    private Circle innerCircle, outerCircle, topDot, bottomDot;
+    private Circle innerCircle;
     private Arc timerCircle;
-    private Pane arcPane;
 
     private Text statusText;
     private Polygon firstUp, secondUp, thirdUp, fourthUp, firstDown, secondDown, thirdDown, fourthDown;
@@ -38,12 +39,19 @@ public class RingTimer {
     private Duration timeLeft;
     private CheckBox timerMode;
     private ImageView resetButton;
+    private LocalDateTime startTime;
+    private LocalDateTime endTime;
+    private final SqliteTrackingDAO timerUsageDAO;
+    private final SessionManager sessionManager;
 
     public RingTimer() {
-
+        this.timerUsageDAO = new SqliteTrackingDAO();
+        this.sessionManager = SessionManager.getInstance();
         initStackPane();
+        initEventHandlers();
+    }
 
-
+    private void initEventHandlers() {
         // Start the animation when the button is clicked
         innerCircle.setOnMouseClicked(event -> toggleClock());
         statusText.setOnMouseClicked(event -> toggleClock());
@@ -70,15 +78,12 @@ public class RingTimer {
         timerMode.setOnAction(e -> handleTimerModeChange());
     }
 
-
-
     private void initStackPane() {
         // Create the UI components
         this.root = new StackPane();
-        this.scene = new Scene(root, 400, 400);
         // Start/stop button & outer ring
         this.innerCircle = new Circle(150, Color.rgb(20,20,20));
-        this.outerCircle = new Circle(155, Color.TRANSPARENT);
+        Circle outerCircle = new Circle(155, Color.TRANSPARENT);
         outerCircle.setStroke(Color.GREEN);
         outerCircle.setStrokeWidth(10);
         root.setPadding(new Insets(20));
@@ -100,12 +105,11 @@ public class RingTimer {
         final double fillSize = ARC_RADIUS * 2 + timerCircle.getStrokeWidth() + INSET * 2;
         Rectangle fill = new Rectangle(fillSize, fillSize, Color.TRANSPARENT);
         Group centeredArcGroup = new Group(fill, timerCircle);
-        arcPane = new StackPane(centeredArcGroup);
+        Pane arcPane = new StackPane(centeredArcGroup);
         arcPane.setPadding(new Insets(INSET));
         arcPane.setMinSize(0,0);
         BorderPane borderPane = new BorderPane();
         borderPane.setCenter(arcPane);
-
 
         Font boldText = new Font("Roboto", 60);
         // Status text (start/stop)
@@ -128,8 +132,8 @@ public class RingTimer {
 
         // Control box buttons and output
         timerMode = new CheckBox("Timer mode");
-        this.topDot = new Circle(3, Color.BLACK);
-        this.bottomDot = new Circle(3, Color.BLACK);
+        Circle topDot = new Circle(3, Color.BLACK);
+        Circle bottomDot = new Circle(3, Color.BLACK);
         this.firstUp = createTriangleButton(true);
         this.secondUp = createTriangleButton(true);
         this.thirdUp = createTriangleButton(true);
@@ -211,12 +215,7 @@ public class RingTimer {
         resetButton.setTranslateY(92);
         resetButton.setTranslateX(55);
 
-
         handleTimerModeChange();
-
-
-
-
 
         // Add everything to the stack pane
         root.getChildren().addAll(outerCircle, borderPane, innerCircle, statusText,
@@ -226,12 +225,10 @@ public class RingTimer {
                 timerMode, resetButton, resetBox);
     }
 
-
-
-    private void resizeControlBox(double width, double height) {
-        ctrlBox.setWidth(width);
+    private void resizeControlBox(double height) {
         ctrlBox.setHeight(height);
     }
+
     private void handleTimerModeChange() {
         if (timerMode.isSelected()) {
             ctrlBox.setTranslateY(70);
@@ -240,7 +237,7 @@ public class RingTimer {
             setResetVisibility(false);
         } else {
             ctrlBox.setTranslateY(70);
-            resizeControlBox(150, 75);
+            resizeControlBox(75);
             timerMode.setTranslateX(-20);
             setControlVisibility(false);
             setResetVisibility(true);
@@ -260,10 +257,12 @@ public class RingTimer {
         box.setOnMouseEntered(e -> buttonIndicator(true, button));
         box.setOnMouseExited(e -> buttonIndicator(false, button));
     }
+
     private void setupResetIndicator() {
         resetBox.setOnMouseEntered(e -> resetBox.setFill(Color.rgb(105, 105, 105, 0.2)));
         resetBox.setOnMouseExited(e -> resetBox.setFill(Color.TRANSPARENT));
     }
+
     private void buttonIndicator(boolean mouseEntered, Polygon button) {
         if (mouseEntered) {
             button.setStroke(Color.GREY);
@@ -275,53 +274,54 @@ public class RingTimer {
 
     private void toggleClock() {
         if (statusText.getText().equals("START")) {
-            statusText.setText("STOP");
             startTimer();
-
         } else {
-            statusText.setText("START");
             stopTimer();
         }
         root.requestLayout();
     }
 
-
     // Inc or dec the first field in clock controls
     private void incrementControls(boolean inc, int field) {
-        System.out.println(String.valueOf(inc)+" inc for field: "+String.valueOf(field));
+        if (debug) System.out.println(String.valueOf(inc) + " inc for field: " + String.valueOf(field));
         int currentValue;
-        if (field == 1) {
-            currentValue = Integer.parseInt(tenHoursField.getText());
-            if (inc && currentValue < 9) {
-                this.tenHoursField.setText(String.valueOf(currentValue+1));
-            } else if (!inc && currentValue > 0) {
-                this.tenHoursField.setText(String.valueOf(currentValue-1));
-            }
-        } else if (field == 2) {
-            currentValue = Integer.parseInt(hoursField.getText());
-            if (inc && currentValue < 9) {
-                this.hoursField.setText(String.valueOf(currentValue+1));
-            } else if (!inc && currentValue > 0) {
-                this.hoursField.setText(String.valueOf(currentValue-1));
-            }
-        } else if (field == 3) {
-            currentValue = Integer.parseInt(tenMinutesField.getText());
-            if (inc && currentValue < 9) {
-                this.tenMinutesField.setText(String.valueOf(currentValue+1));
-            } else if (!inc && currentValue > 0) {
-                this.tenMinutesField.setText(String.valueOf(currentValue-1));
-            }
-        } else if (field == 4) {
-            currentValue = Integer.parseInt(minutesField.getText());
-            if (inc && currentValue < 9) {
-                this.minutesField.setText(String.valueOf(currentValue+1));
-            } else if (!inc && currentValue > 0) {
-                this.minutesField.setText(String.valueOf(currentValue-1));
-            }
+        switch(field) {
+            case 1:
+                currentValue = Integer.parseInt(tenHoursField.getText());
+                if (inc && currentValue < 9) {
+                    this.tenHoursField.setText(String.valueOf(currentValue + 1));
+                } else if (!inc && currentValue > 0) {
+                    this.tenHoursField.setText(String.valueOf(currentValue - 1));
+                }
+                break;
+            case 2:
+                currentValue = Integer.parseInt(hoursField.getText());
+                if (inc && currentValue < 9) {
+                    this.hoursField.setText(String.valueOf(currentValue + 1));
+                } else if (!inc && currentValue > 0) {
+                    this.hoursField.setText(String.valueOf(currentValue - 1));
+                }
+                break;
+            case 3:
+                currentValue = Integer.parseInt(tenMinutesField.getText());
+                if (inc && currentValue < 9) {
+                    this.tenMinutesField.setText(String.valueOf(currentValue + 1));
+                } else if (!inc && currentValue > 0) {
+                    this.tenMinutesField.setText(String.valueOf(currentValue - 1));
+                }
+                break;
+            case 4:
+                currentValue = Integer.parseInt(minutesField.getText());
+                if (inc && currentValue < 9) {
+                    this.minutesField.setText(String.valueOf(currentValue + 1));
+                } else if (!inc && currentValue > 0) {
+                    this.minutesField.setText(String.valueOf(currentValue - 1));
+                }
+                break;
+            default:
         }
         root.requestLayout();
     }
-
 
     private Polygon createTriangleButton(boolean facingUp) {
         Polygon triangleButton = new Polygon();
@@ -347,11 +347,10 @@ public class RingTimer {
 
     private void setControlVisibility(boolean state) {
         if (state) {
-            resizeControlBox(150, 100);
+            resizeControlBox(100);
             timerMode.setTranslateY(105);
-        }
-        else {
-            resizeControlBox(150, 75);
+        } else {
+            resizeControlBox(75);
             timerMode.setTranslateY(90);
         }
         firstUp.setVisible(state);
@@ -371,21 +370,26 @@ public class RingTimer {
         fourthDown.setVisible(state);
         fourthDownBox.setDisable(!state);
     }
+
     private void startTimer() {
-        System.out.println("Starting timer");
+        statusText.setText("STOP");
+        if (debug) System.out.println("Starting timer");
         setControlVisibility(false);
         timerMode.setDisable(true);
+
+        if (sessionManager.isLoggedIn()) startTime = LocalDateTime.now();
 
         // Ensure that timeline is initialized here before using it.
         if (timeline != null) {
             timeline.stop();
-            System.out.println("Existing timeline stopped");
+            if (debug) System.out.println("Existing timeline stopped");
         }
         timeline = new Timeline();  // Ensure timeline is initialized before any possible use
 
         int totalSeconds = getCurrentControlsValue();
+
         if (!timerMode.isSelected()) {
-            System.out.println("Timer mode: Indefinite (count up)");
+            if (debug) System.out.println("Timer mode: Indefinite (count up)");
             if (timeLeft == null) {
                 timeLeft = Duration.seconds(0);
             }
@@ -397,7 +401,7 @@ public class RingTimer {
             timeline.getKeyFrames().add(keyFrame);
         } else {
             if (totalSeconds <= 0) {
-                System.out.println("Total seconds must be greater than zero to start the timer.");
+                if (debug) System.out.println("Total seconds must be greater than zero to start the timer.");
                 timerMode.setDisable(false);
                 setControlVisibility(true);
                 return;
@@ -416,7 +420,7 @@ public class RingTimer {
                     statusText.setText("START");
                     setControlVisibility(true);
                     timerMode.setDisable(false);
-                    System.out.println("Timer reached zero and stopped");
+                    if (debug) System.out.println("Timer reached zero and stopped");
                 }
                 updateTimerDisplay(timeLeft);
             });
@@ -425,7 +429,7 @@ public class RingTimer {
 
         timeline.setCycleCount(Timeline.INDEFINITE);
         timeline.play();
-        System.out.println("Timeline started");
+        if (debug) System.out.println("Timeline started");
     }
 
     private void updateTimerDisplay(Duration duration) {
@@ -433,7 +437,6 @@ public class RingTimer {
         long totalSeconds = (long) duration.toSeconds();
         long hours = totalSeconds / 3600;
         long minutes = (totalSeconds % 3600) / 60;
-        long seconds = totalSeconds % 60;
 
         // Update display
         tenHoursField.setText(String.valueOf(hours / 10));
@@ -444,6 +447,7 @@ public class RingTimer {
     }
 
     private void stopTimer() {
+        statusText.setText("START");
         if (timeline != null) {
             timeline.stop(); // Stop the timeline regardless of the timer mode
         }
@@ -453,10 +457,25 @@ public class RingTimer {
             updateTimerDisplay(timeLeft); // Update display to show 0
         }
 
+        if (sessionManager.isLoggedIn()) {
+            endTime = LocalDateTime.now();
+            logTimerUsage();
+        }
         statusText.setText("START");
         setControlVisibility(timerMode.isSelected());
         timerMode.setDisable(false);
-        System.out.println("Timer stopped");
+        if (debug) System.out.println("Timer stopped");
+    }
+
+    private void logTimerUsage() {
+        String email = sessionManager.getCurrentUserEmail();
+        Timestamp startTimestamp = Timestamp.valueOf(startTime);
+        Timestamp endTimestamp = Timestamp.valueOf(endTime);
+        try {
+            timerUsageDAO.addTimerUsage(email, startTimestamp, endTimestamp);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     private void resetTimerDisplay() {
@@ -475,8 +494,9 @@ public class RingTimer {
         }
         timeLeft = Duration.ZERO;
         updateTimerDisplay(timeLeft);
-        System.out.println("Timer reset to zero");
+        if (debug) System.out.println("Timer reset to zero");
     }
+
     private int getCurrentControlsValue() {
         int tenHours = Integer.parseInt(tenHoursField.getText()) * 10 * 3600;
         int hours = Integer.parseInt(hoursField.getText()) * 3600;
@@ -484,6 +504,7 @@ public class RingTimer {
         int minutes = Integer.parseInt(minutesField.getText()) * 60;
         return tenHours + hours + tenMinutes + minutes; // Return value in seconds
     }
+
     public StackPane getRoot() {
         return root;
     }

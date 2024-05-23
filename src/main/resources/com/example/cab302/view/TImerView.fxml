@@ -18,6 +18,7 @@
             <VBox alignment="CENTER" spacing="20">
                 <StackPane fx:id="timerContainer" prefHeight="300" prefWidth="300" />
                 <Button fx:id="backToLoginButton" minHeight="25.0" onAction="#switchSceneToLogin" prefWidth="300.0" style="-fx-background-color: #263F73;" text="Back to Login" textFill="WHITE" />
+                <Button fx:id="showStatsButton" minHeight="25.0" onAction="#handleShowStatsAction" prefWidth="300.0" style="-fx-background-color: #263F73;" text="Show Stats" textFill="WHITE" />
             </VBox>
         </center>
     </BorderPane>

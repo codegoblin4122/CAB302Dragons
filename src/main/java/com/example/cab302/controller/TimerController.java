@@ -20,10 +20,8 @@ public class TimerController {
 
     @FXML
     private StackPane timerContainer;
-
     @FXML
-    private Button backButton;
-
+    private Button showStatsButton;
     private RingTimer ringTimer;
 
     @FXML
@@ -50,16 +48,10 @@ public class TimerController {
         stage.setScene(scene);
     }
 
-    /**
-     * Handles the action of the back button.
-     * Switches scene on button press to the Signup Screen
-     * @throws IOException if the FXML file for the login scene cannot be loaded.
-     */
     @FXML
-    private void handleBackButtonAction() throws IOException {
-        Stage stage = (Stage) backButton.getScene().getWindow();
-        // Assuming login scene is set up elsewhere
-        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("view/hello-view.fxml"));
+    private void handleShowStatsAction() throws IOException {
+        Stage stage = (Stage) showStatsButton.getScene().getWindow();
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("view/StatsView.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), Main.WIDTH, Main.HEIGHT);
         stage.setScene(scene);
         stage.show();
