@@ -8,12 +8,7 @@ public class ContactTest {
     private Contact contact;
     @BeforeEach
     public void setUp() {
-        contact = new Contact("test", "password", "password");
-    }
-    @Test
-    public void testGetId() {
-        contact.setId(1);
-        assertEquals(1, contact.getId());
+        contact = new Contact("test", "password");
     }
 
     @Test
@@ -35,16 +30,5 @@ public class ContactTest {
     public void testSetPassword() {
         contact.setPassword("password");
         assertEquals("password", contact.getPassword());
-    }
-
-    @Test
-    public void testGetConfirmPassword() {
-        assertEquals("password", contact.getPasswordConfirm());
-    }
-
-    @Test
-    public void testSetConfirmPassword() {
-        contact.setPasswordConfirm("password");
-        assertEquals("password", contact.getPasswordConfirm());
     }
 }
