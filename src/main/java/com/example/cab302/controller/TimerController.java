@@ -42,6 +42,10 @@ public class TimerController {
      */
     @FXML
     protected void switchSceneToLogin() throws IOException {
+        if (ringTimer.getRunning()) {
+            ringTimer.stopTimer();
+        }
+
         Stage stage = (Stage) backToLoginButton.getScene().getWindow();
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("view/hello-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), Main.WIDTH, Main.HEIGHT);
@@ -50,6 +54,9 @@ public class TimerController {
 
     @FXML
     private void handleShowStatsAction() throws IOException {
+        if (ringTimer.getRunning()) {
+            ringTimer.stopTimer();
+        }
         Stage stage = (Stage) showStatsButton.getScene().getWindow();
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("view/StatsView.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), Main.WIDTH, Main.HEIGHT);

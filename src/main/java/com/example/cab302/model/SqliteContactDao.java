@@ -24,8 +24,8 @@ public class SqliteContactDao implements IContactDAO {
      */
     private void createTable() {
         String createQuery = "CREATE TABLE IF NOT EXISTS contacts ("
-                + "email VARCHAR PRIMARY KEY,"
-                + "password VARCHAR NOT NULL"
+                + "email VARCHAR(255) PRIMARY KEY,"
+                + "password VARCHAR(255) NOT NULL"
                 + ")";
         try {
             Statement createTable = connection.createStatement();

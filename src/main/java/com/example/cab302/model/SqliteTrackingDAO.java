@@ -14,7 +14,7 @@ public class SqliteTrackingDAO {
     private void createTable() {
         String createQuery = "CREATE TABLE IF NOT EXISTS TimerUsage ("
                 + "id INTEGER PRIMARY KEY AUTOINCREMENT,"
-                + "userEmail VARCHAR NOT NULL,"
+                + "userEmail VARCHAR(255) NOT NULL,"
                 + "startTime TIMESTAMP NOT NULL,"
                 + "endTime TIMESTAMP NOT NULL,"
                 + "FOREIGN KEY (userEmail) REFERENCES contacts(email)"

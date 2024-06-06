@@ -371,7 +371,7 @@ public class RingTimer {
         fourthDownBox.setDisable(!state);
     }
 
-    private void startTimer() {
+    public void startTimer() {
         statusText.setText("STOP");
         if (debug) System.out.println("Starting timer");
         setControlVisibility(false);
@@ -446,7 +446,7 @@ public class RingTimer {
         root.requestLayout();
     }
 
-    private void stopTimer() {
+    public void stopTimer() {
         statusText.setText("START");
         if (timeline != null) {
             timeline.stop(); // Stop the timeline regardless of the timer mode
@@ -507,5 +507,9 @@ public class RingTimer {
 
     public StackPane getRoot() {
         return root;
+    }
+
+    public boolean getRunning() {
+        return statusText.getText().equals("STOP");
     }
 }

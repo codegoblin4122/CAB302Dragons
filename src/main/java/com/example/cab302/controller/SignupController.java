@@ -108,7 +108,7 @@ public class SignupController {
         }
 
         // Hash the password
-        String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
+        String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt(12));
 
         // Create a new Contact object with the entered values
         Contact newContact = new Contact(email, hashedPassword);
